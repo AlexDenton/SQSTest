@@ -14,22 +14,27 @@ namespace SQSTest
 
         static void Main(string[] args)
         {
-            Configuration = new ConfigurationBuilder().Build();
-            var options = Configuration.GetAWSOptions();
-            Console.WriteLine($"Profile: {options.Profile}");
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appSettings.json")
+                .Build();
 
-            //Run().Wait();
+            Run().Wait();
         }
 
         public static async Task Run()
         {
-            var sqsClient = SQSHelper.GetSQSClient();
-            var sqsHelper = new SQSHelper();
-            var createQueueResponse = await sqsHelper.CreateSQSQueue();
-            var queueUrlResponse = await sqsHelper.GetQueueUrl();
-            var sendMessageResponse = await sqsHelper.SendSQSMessage(queueUrlResponse.QueueUrl);
-            var receiveMessageResponse = await sqsHelper.ReceiveSQSMessage(queueUrlResponse.QueueUrl);
-            sqsHelper.ProcessReceiveMessageResponse(receiveMessageResponse);
+            var options = Configuration.GetAWSOptions();
+            Console.WriteLine($"Profile: {options.Profile}");
+            var credentials = await options.Credentials.GetCredentialsAsync();
+            Console.WriteLine($"Access Key: {credentials.AccessKey}");
+
+            //var sqsHelper = new SQSHelper();
+            //var createQueueResponse = await sqsHelper.CreateSQSQueue();
+            //var queueUrlResponse = await sqsHelper.GetQueueUrl();
+            //var sendMessageResponse = await sqsHelper.SendSQSMessage(queueUrlResponse.QueueUrl);
+            //var receiveMessageResponse = await sqsHelper.ReceiveSQSMessage(queueUrlResponse.QueueUrl);
+            //sqsHelper.ProcessReceiveMessageResponse(receiveMessageResponse);
         }
     }
 }
