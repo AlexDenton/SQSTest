@@ -16,7 +16,7 @@ namespace SQSTest
         {
             Configuration = new ConfigurationBuilder().Build();
             var options = Configuration.GetAWSOptions();
-            Console.WriteLine(options);
+            Console.WriteLine(options.Profile);
 
             //Run().Wait();
         }
