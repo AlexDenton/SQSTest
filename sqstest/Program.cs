@@ -16,7 +16,7 @@ namespace SQSTest
         {
             Configuration = new ConfigurationBuilder().Build();
             var options = Configuration.GetAWSOptions();
-            Console.WriteLine(options.Profile);
+            Console.WriteLine($"Profile: {options.Profile}");
 
             //Run().Wait();
         }
@@ -29,7 +29,7 @@ namespace SQSTest
             var queueUrlResponse = await sqsHelper.GetQueueUrl();
             var sendMessageResponse = await sqsHelper.SendSQSMessage(queueUrlResponse.QueueUrl);
             var receiveMessageResponse = await sqsHelper.ReceiveSQSMessage(queueUrlResponse.QueueUrl);
-            await sqsHelper.ProcessReceiveMessageResponse(receiveMessageResponse);
+            sqsHelper.ProcessReceiveMessageResponse(receiveMessageResponse);
         }
     }
 }

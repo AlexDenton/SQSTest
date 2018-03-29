@@ -75,7 +75,7 @@ namespace SQSTest
             return await _AmazonSQSClient.ReceiveMessageAsync(receiveMessageRequest);
         }
 
-        public async Task ProcessReceiveMessageResponse(ReceiveMessageResponse response)
+        public void ProcessReceiveMessageResponse(ReceiveMessageResponse response)
         {
             foreach (var message in response.Messages)
             {
