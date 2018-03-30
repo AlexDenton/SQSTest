@@ -49,7 +49,6 @@ namespace SQSTest
             var request = new GetQueueUrlRequest
             {
                 QueueName = _QueueName,
-                QueueOwnerAWSAccountId = ""
             };
 
             return (await _AmazonSQSClient.GetQueueUrlAsync(request));
