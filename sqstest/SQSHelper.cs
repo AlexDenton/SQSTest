@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Amazon.Extensions.NETCore.Setup;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 
@@ -8,13 +9,13 @@ namespace SQSTest
 {
     public class SQSHelper
     {
-        private readonly AmazonSQSClient _AmazonSQSClient;
+        private readonly IAmazonSQS _AmazonSQSClient;
 
         private const string _QueueName = "DentonQueue";
 
-        public SQSHelper()
+        public SQSHelper(AWSOptions options)
         {
-            _AmazonSQSClient = GetSQSClient();
+            _AmazonSQSClient = options.CreateServiceClient<IAmazonSQS>();
         }
 
         public static AmazonSQSClient GetSQSClient()

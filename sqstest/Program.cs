@@ -26,14 +26,14 @@ namespace SQSTest
         {
             var options = Configuration.GetAWSOptions();
             Console.WriteLine($"Profile: {options.Profile}");
-            var client = options.CreateServiceClient<IAmazonSQS>();
-            Console.WriteLine($"ServiceURL: {client.Config.DetermineServiceURL()}");
+            //var client = options.CreateServiceClient<IAmazonSQS>();
+            //Console.WriteLine($"ServiceURL: {client.Config.DetermineServiceURL()}");
 
             //var credentials = await options.Credentials.GetCredentialsAsync();
             //Console.WriteLine($"Access Key: {credentials.AccessKey}");
 
-            //var sqsHelper = new SQSHelper();
-            //var createQueueResponse = await sqsHelper.CreateSQSQueue();
+            var sqsHelper = new SQSHelper(options);
+            var createQueueResponse = await sqsHelper.CreateSQSQueue();
             //var queueUrlResponse = await sqsHelper.GetQueueUrl();
             //var sendMessageResponse = await sqsHelper.SendSQSMessage(queueUrlResponse.QueueUrl);
             //var receiveMessageResponse = await sqsHelper.ReceiveSQSMessage(queueUrlResponse.QueueUrl);
