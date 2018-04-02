@@ -5,22 +5,20 @@ namespace SQSTest
 {
     public class SQSQueueSender
     {
-        private SQSHelper _SQSHelper;
+        private SQSQueueMananger _sqsQueueMananger;
 
         private readonly TimeSpan _SendDelay = TimeSpan.FromMilliseconds(1);
 
-        public SQSQueueSender(SQSHelper sqsHelper)
+        public SQSQueueSender(SQSQueueMananger sqsQueueMananger)
         {
-            _SQSHelper = sqsHelper;
+            _sqsQueueMananger = sqsQueueMananger;
         }
 
         public async Task Run()
         {
-            var queueUrlResponse = await _SQSHelper.GetQueueUrl();
-
             for (var i = 0; i < 10; i++)
             {
-                await _SQSHelper.SendSQSMessage(queueUrlResponse.QueueUrl, i.ToString());
+                await _sqsQueueMananger.SendSQSMessage(i.ToString());
                 await Task.Delay(_SendDelay);
             }
         }

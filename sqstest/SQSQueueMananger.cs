@@ -7,15 +7,21 @@ using Amazon.SQS.Model;
 
 namespace SQSTest
 {
-    public class SQSHelper
+    public class SQSQueueMananger
     {
         private readonly IAmazonSQS _AmazonSQSClient;
 
-        private const string _QueueName = "DentonQueue";
+        private readonly string _QueueName;
 
-        public SQSHelper(AWSOptions options)
+        private readonly string _QueueUrl;
+
+        public SQSQueueMananger(
+            AWSOptions options,
+            string queueName)
         {
             _AmazonSQSClient = options.CreateServiceClient<IAmazonSQS>();
+            _QueueName = queueName;
+            _QueueUrl = GetQueueUrl().Result.QueueUrl;
         }
 
         public async Task<CreateQueueResponse> CreateSQSQueue()
@@ -41,25 +47,25 @@ namespace SQSTest
                 QueueName = _QueueName,
             };
 
-            return (await _AmazonSQSClient.GetQueueUrlAsync(request));
+            return await _AmazonSQSClient.GetQueueUrlAsync(request);
         }
 
-        public async Task<SendMessageResponse> SendSQSMessage(string queueUrl, string body)
+        public async Task<SendMessageResponse> SendSQSMessage(string body)
         {
             var sendMessageRequest = new SendMessageRequest
             {
-                QueueUrl = queueUrl,
+                QueueUrl = _QueueUrl,
                 MessageBody = body
             };
 
             return await _AmazonSQSClient.SendMessageAsync(sendMessageRequest);
         }
 
-        public async Task<ReceiveMessageResponse> ReceiveSQSMessage(string queueUrl)
+        public async Task<ReceiveMessageResponse> ReceiveSQSMessage()
         {
             var receiveMessageRequest = new ReceiveMessageRequest
             {
-                QueueUrl = queueUrl,
+                QueueUrl = _QueueUrl,
                 MaxNumberOfMessages = 10,
                 WaitTimeSeconds = 5,
             };
@@ -67,23 +73,15 @@ namespace SQSTest
             return await _AmazonSQSClient.ReceiveMessageAsync(receiveMessageRequest);
         }
 
-        public async Task<DeleteMessageResponse> DeleteSQSMessage(string queueUrl, string receiptHandle)
+        public async Task<DeleteMessageResponse> DeleteSQSMessage(string receiptHandle)
         {
             var deleteMessageRequest = new DeleteMessageRequest
             {
-                QueueUrl = queueUrl,
+                QueueUrl = _QueueUrl,
                 ReceiptHandle = receiptHandle
             };
 
             return await _AmazonSQSClient.DeleteMessageAsync(deleteMessageRequest);
-        }
-
-        public void ProcessReceiveMessageResponse(ReceiveMessageResponse response)
-        {
-            foreach (var message in response.Messages)
-            {
-                Console.WriteLine(message.Body);
-            }
         }
     }
 }

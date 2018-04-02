@@ -25,12 +25,12 @@ namespace SQSTest
         public static async Task Run()
         {
             var options = Configuration.GetAWSOptions();
-            var sqsHelper = new SQSHelper(options);
+            var sqsQueueMananger = new SQSQueueMananger(options, "DentonQueue");
 
-            var sqsQueueSender = new SQSQueueSender(sqsHelper);
+            var sqsQueueSender = new SQSQueueSender(sqsQueueMananger);
             var senderTask = sqsQueueSender.Run();
 
-            var sqsQueueReceiver = new SQSQueueReceiver(sqsHelper);
+            var sqsQueueReceiver = new SQSQueueReceiver(sqsQueueMananger);
             var receiverTask = sqsQueueReceiver.Run();
 
             await Task.WhenAll(

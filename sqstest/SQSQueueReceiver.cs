@@ -1,32 +1,29 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SQSTest
 {
     public class SQSQueueReceiver
     {
-        private readonly SQSHelper _SQSHelper;
+        private readonly SQSQueueMananger _sqsQueueMananger;
 
         private readonly TimeSpan _PollDelay = TimeSpan.FromMilliseconds(1);
 
-        public SQSQueueReceiver(SQSHelper sqsHelper)
+        public SQSQueueReceiver(SQSQueueMananger sqsQueueMananger)
         {
-            _SQSHelper = sqsHelper;
+            _sqsQueueMananger = sqsQueueMananger;
         }
 
         public async Task Run()
         {
-            var queueUrlResponse = await _SQSHelper.GetQueueUrl();
-
             while (true)
             {
-                var receiveMessageResponse = await _SQSHelper.ReceiveSQSMessage(queueUrlResponse.QueueUrl);
+                var receiveMessageResponse = await _sqsQueueMananger.ReceiveSQSMessage();
 
                 foreach (var message in receiveMessageResponse.Messages)
                 {
                     Console.Write($"{message.Body}, ");
-                    var deleteMessageResponse = await _SQSHelper.DeleteSQSMessage(queueUrlResponse.QueueUrl, message.ReceiptHandle);
+                    var deleteMessageResponse = await _sqsQueueMananger.DeleteSQSMessage(message.ReceiptHandle);
                 }
 
                 Console.WriteLine();
