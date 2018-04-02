@@ -54,12 +54,12 @@ namespace SQSTest
             return (await _AmazonSQSClient.GetQueueUrlAsync(request));
         }
 
-        public async Task<SendMessageResponse> SendSQSMessage(string queueUrl)
+        public async Task<SendMessageResponse> SendSQSMessage(string queueUrl, string body)
         {
             var sendMessageRequest = new SendMessageRequest
             {
                 QueueUrl = queueUrl,
-                MessageBody = "Hello there"
+                MessageBody = body
             };
 
             return await _AmazonSQSClient.SendMessageAsync(sendMessageRequest);
@@ -69,10 +69,21 @@ namespace SQSTest
         {
             var receiveMessageRequest = new ReceiveMessageRequest
             {
-                QueueUrl = queueUrl
+                QueueUrl = queueUrl,
             };
 
             return await _AmazonSQSClient.ReceiveMessageAsync(receiveMessageRequest);
+        }
+
+        public async Task<DeleteMessageResponse> DeleteSQSMessage(string queueUrl, string receiptHandle)
+        {
+            var deleteMessageRequest = new DeleteMessageRequest
+            {
+                QueueUrl = queueUrl,
+                ReceiptHandle = receiptHandle
+            };
+
+            return await _AmazonSQSClient.DeleteMessageAsync(deleteMessageRequest);
         }
 
         public void ProcessReceiveMessageResponse(ReceiveMessageResponse response)
