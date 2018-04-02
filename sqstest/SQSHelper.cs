@@ -18,16 +18,6 @@ namespace SQSTest
             _AmazonSQSClient = options.CreateServiceClient<IAmazonSQS>();
         }
 
-        public static AmazonSQSClient GetSQSClient()
-        {
-            var sqsConfig = new AmazonSQSConfig
-            {
-                ServiceURL = ""
-            };
-
-            return new AmazonSQSClient(sqsConfig);
-        }
-
         public async Task<CreateQueueResponse> CreateSQSQueue()
         {
             var createQueueRequest = new CreateQueueRequest
@@ -70,6 +60,8 @@ namespace SQSTest
             var receiveMessageRequest = new ReceiveMessageRequest
             {
                 QueueUrl = queueUrl,
+                MaxNumberOfMessages = 10,
+                WaitTimeSeconds = 5,
             };
 
             return await _AmazonSQSClient.ReceiveMessageAsync(receiveMessageRequest);

@@ -7,7 +7,7 @@ namespace SQSTest
     {
         private SQSHelper _SQSHelper;
 
-        private readonly TimeSpan _SendDelay = TimeSpan.FromMilliseconds(500);
+        private readonly TimeSpan _SendDelay = TimeSpan.FromMilliseconds(1);
 
         public SQSQueueSender(SQSHelper sqsHelper)
         {

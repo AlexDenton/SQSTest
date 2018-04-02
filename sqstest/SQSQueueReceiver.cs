@@ -8,7 +8,7 @@ namespace SQSTest
     {
         private readonly SQSHelper _SQSHelper;
 
-        private readonly TimeSpan _PollDelay = TimeSpan.FromMilliseconds(1000);
+        private readonly TimeSpan _PollDelay = TimeSpan.FromMilliseconds(1);
 
         public SQSQueueReceiver(SQSHelper sqsHelper)
         {

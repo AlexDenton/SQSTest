@@ -26,11 +26,6 @@ namespace SQSTest
         {
             var options = Configuration.GetAWSOptions();
             var sqsHelper = new SQSHelper(options);
-            //var createQueueResponse = await sqsHelper.CreateSQSQueue();
-            //var queueUrlResponse = await sqsHelper.GetQueueUrl();
-            //var sendMessageResponse = await sqsHelper.SendSQSMessage(queueUrlResponse.QueueUrl);
-            //var receiveMessageResponse = await sqsHelper.ReceiveSQSMessage(queueUrlResponse.QueueUrl);
-            //sqsHelper.ProcessReceiveMessageResponse(receiveMessageResponse);
 
             var sqsQueueSender = new SQSQueueSender(sqsHelper);
             var senderTask = sqsQueueSender.Run();
